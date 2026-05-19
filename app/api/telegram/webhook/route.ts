@@ -1,0 +1,21 @@
+import { NextRequest, NextResponse } from "next/server";
+import { handleTelegramUpdate } from "@/lib/orchestrator";
+
+export async function POST(request: NextRequest) {
+  try {
+    const secret = process.env.TELEGRAM_WEBHOOK_SECRET;
+    if (secret) {
+      const header = request.headers.get("x-telegram-bot-api-secret-token");
+      if (header !== secret) {
+        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      }
+    }
+
+    const update = await request.json();
+    await handleTelegramUpdate(update);
+    return NextResponse.json({ ok: true });
+  } catch (error) {
+    console.error("[telegram/webhook]", error);
+    return NextResponse.json({ ok: true });
+  }
+}
