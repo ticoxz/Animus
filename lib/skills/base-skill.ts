@@ -4,9 +4,10 @@ import type { SkillId } from "@/lib/types";
 export interface SkillContext {
   user: DbUser;
   text: string;
+  chatId?: number;
 }
 
-/** Patrón tipo Evva packages/skills — adaptado a Next.js */
+/** Registry de skills — complementa toolsets del agent loop Hermes */
 export interface SkillDefinition {
   id: SkillId;
   description: string;

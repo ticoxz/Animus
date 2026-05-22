@@ -1,4 +1,4 @@
--- Inspirado en Evva memory_facts: hechos atómicos + extracción async
+-- Memory toolset (Hermes): hechos atómicos + extracción async
 
 create table if not exists memory_facts (
   id uuid primary key default gen_random_uuid(),

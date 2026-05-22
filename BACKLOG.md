@@ -8,7 +8,7 @@ Documento vivo: cada charla, pregunta y decisión se vuelca acá para después s
 - **Preguntas abiertas:** pendientes de respuesta tuya.
 - **Descartado MVP:** fuera de scope actual (puede volver post-validación).
 
-*Última actualización: 2026-05-19 (Fase 2 agentes diarios)*
+*Última actualización: 2026-05-19 (memory bank + gastos + plan_dia)*
 
 ---
 
@@ -98,13 +98,17 @@ flowchart TB
 ## En construcción (MVP actual)
 
 - [x] Scaffold Next.js + webhook Telegram + health + cron stub
-- [ ] Conectar `.env` (Telegram, Supabase, OpenAI)
-- [ ] Extractor de memoria post-mensaje → `users.profile`
-- [ ] Skill `gastos` + confirmación Sí/No
-- [ ] Google Calendar OAuth + skill `reuniones`
+- [x] Memory bank (facts, entities, relations) + retrieve + `/mind`
+- [x] Extractor post-mensaje (throttle 30s) + `olvidá X`
+- [x] Skill `gastos` + confirmación Sí/No (inline)
+- [x] Skill `plan_dia` básica + “Mis skills” con DB
+- [ ] Conectar `.env` y deploy (ver `docs/SETUP.md`)
+- [x] Google Calendar OAuth + skill `reuniones` (`/connect google`, `/agenda`)
+- [x] Clima wttr.in + toolset web + `/integrations` + modo Hermes
+- [x] WhatsApp webhook stub + Spotify OAuth stub
+- [ ] Groq voice + OpenAI TTS (toolset Hermes tts)
 - [ ] Vision + skill `nutricion`
 - [ ] Skill `wrapup` + proactividad Nivel 2 por skill
-- [ ] Botón / flujo “Mis skills” con estados reales en DB
 
 ---
 
@@ -147,13 +151,14 @@ flowchart TB
 - [ ] Skills custom en markdown (comunidad / vos)
 - [ ] “Third brain” equipo (muy post-MVP)
 
-### Benchmark técnico: [Evva](https://github.com/lacasoft/evva-ai)
-- [x] **Patrones adoptados** (reescritos en Next): skill registry, `/memory`, extract facts async, `memory_facts` — ver [docs/EVVA-PATTERNS.md](./docs/EVVA-PATTERNS.md)
-- [ ] Pendiente desde Evva: pgvector RAG, worker+Redis, finance tools, calendar OAuth, daily briefing real
-- [ ] Nosotros: consentimiento Nivel 0–2, plan_dia, Fase 2 noticias LATAM (Evva no tiene esto igual)
+### Benchmark técnico: [Hermes Agent](https://github.com/nousresearch/hermes-agent)
+- [x] Agent loop + tools — `lib/agent/`, `AGENT_TOOLS_ENABLED`
+- [x] Memory + session_search + runtime skills — ver [docs/HERMES-PATTERNS.md](./docs/HERMES-PATTERNS.md)
+- [x] Fase 2: curator + SKILL.md + nudge post-tarea
+- [ ] Fase 3: MCP · Fase 4: multi-gateway · Fase 5: subagentes
 
 ### Negocio / competencia
-- [ ] Revisar Evva, Dani IA, POQT cuando definamos pricing
+- [ ] Revisar mercado LATAM cuando definamos pricing
 - [ ] Tier Free/Pro (Vision limits, proactividad ilimitada)
 
 ---
@@ -165,7 +170,7 @@ flowchart TB
 | ¿Telegram o React Native? | Telegram MVP; RN después si hace falta |
 | ¿Skills o agentes? | Skills orquestadas; no multi-agente en Alpha |
 | ¿Obsidian al inicio? | No en MVP; posible después |
-| ¿Hay competencia? | Sí por módulo; Evva muy cercano técnicamente; foso = LATAM + no-intrusivo + vida completa |
+| ¿Referencia técnica? | Hermes Agent (arquitectura); foso producto = LATAM + no-intrusivo + consumidor |
 | ¿Next solo front? | **No** — Next = backend (API Routes) + `lib/` |
 | ¿Guardar preguntas para extracto? | **Sí** — este archivo `BACKLOG.md` |
 | ¿Ubicación / cuánto tiempo en un lugar? | **Parcial en Telegram** (pin o live location + opt-in); tracking continuo = app después |
@@ -199,9 +204,9 @@ flowchart TB
 - **Respuesta técnica:** Con solo Telegram no hay GPS de fondo; sí pin + ubicación en vivo compartida. Skill `ubicacion` con consentimiento fuerte; historial en DB para duración y preguntas.
 - **Acción:** backlog (después de gastos/reuniones); no bloquea MVP actual.
 
-### 2026-05-19 — Adoptar patrones Evva
-- **Decisión:** Copiar **ideas que sirven** (registry, memory, fact extraction), no el monorepo Nest.
-- **Hecho:** `lib/skills/registry`, `memory.ts`, `extract-facts.ts`, migration `002_memory_facts.sql`, `docs/EVVA-PATTERNS.md`.
+### 2026-05-19 — Arquitectura Hermes
+- **Decisión:** Filosofía Hermes en TypeScript (agent loop, toolsets, procedural memory), no fork Python.
+- **Hecho:** `lib/agent/`, `lib/skills/registry`, memory, `docs/HERMES-PATTERNS.md`.
 
 ### 2026-05-19 — Fase 2 agentes diarios + noticias
 - **Idea:** Correr agentes todos los días (como el modelo actual de la industria); según **quién es** la persona, mandar noticias útiles: eventos en su zona, “hoy está barato en X con tarjeta Y”, cruzado con el día.
@@ -220,7 +225,7 @@ flowchart TB
 - Análisis `mvp.md`: visión Animus (compañero proactivo), 3 módulos, memoria en Supabase.
 - Accesibilidad universal (abuelos): mensajes cortos, Sí/No, quiet hours desde Fase 1.
 - Validación: primero vos, después hermana; “god” en capacidades, suave en intrusión.
-- Competencia: Evva, Dani IA, Meta internal playbook como referencia.
+- Referencia arquitectura: Hermes Agent; producto: Meta Second Brain playbook.
 - Código: scaffold repo Next + webhook + schema SQL.
 
 ---

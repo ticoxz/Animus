@@ -4,6 +4,7 @@ export type SkillId =
   | "reuniones"
   | "nutricion"
   | "wrapup"
+  | "plan_dia"
   | "contexto_vida";
 
 export type SkillStatus = "locked" | "offered" | "active" | "paused";

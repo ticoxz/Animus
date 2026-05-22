@@ -4,7 +4,7 @@
 **Animus** no es un chatbot reactivo ni una herramienta de productividad tradicional; es un **compañero cognitivo proactivo** (tu segundo cerebro en Telegram). Su objetivo principal es tercerizar la fatiga mental del usuario. No espera comandos; se anticipa cruzando el contexto personal, la agenda, las finanzas y el entorno, interactuando de manera conversacional y empática.
 
 ### 1.1. Diferenciador Clave (El Foso Defensivo)
-A diferencia de sistemas operativos de IA (Hermes, OpenClaw) que son lienzos en blanco para desarrolladores, este producto tiene **opinión de fábrica**. Está diseñado para el consumidor final: cero configuraciones complejas, onboarding invisible y proactividad desde el día uno a través de interfaces de baja fricción (Telegram).
+A diferencia de sistemas operativos de IA ([Hermes Agent](https://github.com/nousresearch/hermes-agent), OpenClaw) que son lienzos en blanco para desarrolladores, este producto tiene **opinión de fábrica**. Está diseñado para el consumidor final: cero configuraciones complejas, onboarding invisible y proactividad desde el día uno a través de interfaces de baja fricción (Telegram).
 
 ---
 

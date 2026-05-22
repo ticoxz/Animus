@@ -5,13 +5,19 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -H 0.0.0.0 -p ${PORT:-3000}",
     "lint": "eslint",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "check:env": "node scripts/check-env.mjs",
+    "verify:db": "node scripts/verify-db.mjs",
+    "local:setup": "bash scripts/local-setup.sh",
+    "init:env": "bash scripts/init-env.sh"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.49.1",
+    "jose": "^6.0.11",
     "next": "^15.3.2",
+    "react-force-graph-2d": "^1.27.4",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "zod": "^3.24.2"

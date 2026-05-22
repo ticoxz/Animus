@@ -24,5 +24,6 @@ yarn-error.log*
 
 # misc
 .DS_Store
+.ai-memory/
 *.pem
 .vercel

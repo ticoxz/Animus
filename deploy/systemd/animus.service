@@ -1,0 +1,15 @@
+[Unit]
+Description=Animus Telegram cognitive companion
+After=network.target
+
+[Service]
+Type=simple
+User=animus
+WorkingDirectory=/opt/animus
+EnvironmentFile=/opt/animus/.env
+ExecStart=/usr/bin/node /opt/animus/.next/standalone/server.js
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

@@ -6,34 +6,64 @@ function matchesMemoryCommand(text: string): boolean {
   const t = text.trim().toLowerCase();
   return (
     t === "/memory" ||
-    t === "qué sabés de mí" ||
-    t === "que sabes de mi" ||
-    t === "que sabés de mí"
+    t === "mostrar memoria" ||
+    t === "ver memoria" ||
+    t === "ver mi memoria"
   );
 }
 
-/** Equivalente al /memory de Evva — perfil + últimos hechos */
+/** Toolset memory (Hermes) — perfil + últimos hechos */
 export const memorySkill: SkillDefinition = {
   id: "core_chat",
   description: "Mostrar memoria (perfil + hechos recientes)",
   matches: matchesMemoryCommand,
   handle: async ({ user }) => {
-    const profileBlock = buildProfileBlock(user.profile);
+    const { flushFactExtractionNow } = await import(
+      "@/lib/memory/extraction-queue"
+    );
+    await flushFactExtractionNow(user.id);
+
     const supabase = getSupabase();
+    let profile = user.profile;
+    if (supabase) {
+      const { data: fresh } = await supabase
+        .from("users")
+        .select("profile")
+        .eq("id", user.id)
+        .single();
+      if (fresh?.profile) profile = fresh.profile as typeof user.profile;
+    }
+
+    const profileBlock = buildProfileBlock(profile);
 
     let factsBlock = "_Todavía no hay hechos sueltos guardados._";
+    let entitiesBlock = "";
     if (supabase) {
-      const { data: facts } = await supabase
-        .from("memory_facts")
-        .select("fact, category, created_at")
-        .eq("user_id", user.id)
-        .order("created_at", { ascending: false })
-        .limit(8);
+      const [{ data: facts }, { data: entities }] = await Promise.all([
+        supabase
+          .from("memory_facts")
+          .select("fact, category, created_at")
+          .eq("user_id", user.id)
+          .order("created_at", { ascending: false })
+          .limit(8),
+        supabase
+          .from("user_entities")
+          .select("name, type")
+          .eq("user_id", user.id)
+          .order("updated_at", { ascending: false })
+          .limit(8),
+      ]);
 
       if (facts?.length) {
         factsBlock = facts
           .map((f) => `• [${f.category}] ${f.fact}`)
           .join("\n");
+      }
+
+      if (entities?.length) {
+        entitiesBlock =
+          "\n\n<b>Entidades en tu grafo</b>\n" +
+          entities.map((e) => `• [${e.type}] ${e.name}`).join("\n");
       }
     }
 
@@ -42,7 +72,9 @@ export const memorySkill: SkillDefinition = {
       profileBlock +
       "\n\n<b>Hechos recientes</b>\n" +
       factsBlock +
-      "\n\nSi algo está mal, decime «olvidá que …» o corregime en el chat."
+      entitiesBlock +
+      "\n\nVer grafo: /mind\n" +
+      "Corregir: «olvidá que …»"
     );
   },
 };

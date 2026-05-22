@@ -48,3 +48,18 @@ export async function findOrCreateUser(input: {
 
   return created as DbUser;
 }
+
+/** Perfil fresco desde DB (estilo de voz, memoria JSON). */
+export async function reloadUser(userId: string): Promise<DbUser | null> {
+  const supabase = getSupabase();
+  if (!supabase) return null;
+
+  const { data, error } = await supabase
+    .from("users")
+    .select("*")
+    .eq("id", userId)
+    .maybeSingle();
+
+  if (error || !data) return null;
+  return data as DbUser;
+}
