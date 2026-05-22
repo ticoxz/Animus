@@ -43,7 +43,7 @@ Con `AGENT_TOOLS_ENABLED=true` el modelo **usa herramientas** antes de responder
 - `quién soy` → resumen corto en español (no volcado crudo del perfil)
 - `/memory` → perfil completo + hechos recientes
 - `/mind` → **grafo interactivo** (nodos, relaciones, búsqueda, zoom)
-- Estilo de voz **por usuario** (ej. español paraguayo vs chileno)
+- Estilo de voz **configurable por usuario**
 - `olvidá X` — borrado selectivo
 
 ### Skills
@@ -106,7 +106,7 @@ Cron ──► /api/cron/proactive ──► briefing + curator
 | LLM alternativo | OpenAI (`LLM_PROVIDER=openai`) |
 | Canal | **Telegram Bot API** |
 | Grafo | **react-force-graph-2d** |
-| Producción | **VPS 24/7** (recomendado) o local + ngrok (dev) |
+| Producción | **VPS 24/7** (recomendado) o desarrollo local |
 
 ---
 
@@ -123,7 +123,7 @@ npm install
 npm run dev
 ```
 
-En otra terminal: `ngrok http 3000` → actualizar `APP_BASE_URL` → `./scripts/set-webhook.sh URL`
+Configurá `APP_BASE_URL` con una URL HTTPS pública y registrá el webhook: `./scripts/set-webhook.sh https://tu-dominio.com`
 
 **Guía completa:** [docs/LOCAL-COMPLETO.md](./docs/LOCAL-COMPLETO.md) · [docs/PRUEBA-LOCAL.md](./docs/PRUEBA-LOCAL.md) · [docs/SETUP.md](./docs/SETUP.md)
 
@@ -138,10 +138,10 @@ npm run check:env
 
 ### Google Calendar (opcional)
 
-1. Google Cloud → OAuth Web → redirect `http://localhost:3000/api/oauth/google/callback` (o ngrok en prod)
-2. Usuario de prueba en modo Testing
+1. Google Cloud → OAuth Web → redirect `https://tu-dominio.com/api/oauth/google/callback` (o localhost solo en dev)
+2. Usuario de prueba en modo Testing (si la app está en Testing)
 3. `.env.local`: `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `GOOGLE_REDIRECT_URI`
-4. Telegram: `/connect google` → `/agenda` · `Drimo 25/5 a las 11` o `/agendar`
+4. Telegram: `/connect google` → `/agenda` o `/agendar` con lenguaje natural
 
 ---
 
@@ -176,7 +176,7 @@ docker compose up -d --build
 | `/agenda` | Ver eventos |
 | `/agendar` | Crear eventos desde charla |
 
-Frases: `clima en Viña del Mar`, `hola quién soy`, `quiero un skill que…`, `anotá en el calendario…`
+Frases: `clima en Santiago`, `hola quién soy`, `quiero un skill que…`, `agendá reunión mañana a las 10`
 
 ---
 
